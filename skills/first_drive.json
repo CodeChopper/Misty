@@ -1,0 +1,20 @@
+{
+  "Name": "first_drive",
+  "UniqueId": "b56bc1bf-3fe5-4f45-93bf-68beb0525580",
+  "Description": "Basic driving around and TOF sensing.",
+  "StartupRules": [
+    "Manual",
+    "Robot"
+  ],
+  "Language": "javascript",
+  "BroadcastMode": "verbose",
+  "TimeoutInSeconds": 600,
+  "CleanupOnCancel": true,
+  "WriteToLog": false,
+  "Parameters": {
+    "int": 10,
+    "double": 20.5,
+    "string": "twenty"
+  }
+}
+

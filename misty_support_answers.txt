@@ -1,0 +1,11 @@
+Hi. Is there a way to assign a default skill to run after powering up?
+In other words, if one develops a general personality skill (i.e. roam
+the room with obstacle avoidance and some basic personality: sounds,
+head movement etc.) then is there a way to launch this skill
+automatically when Misty is powered on?
+
+You can set a skill to run automatically when Misty boots up by adding
+the string “Startup” to the StartupRules array in the meta file for
+your skill. There is a bit more information about this functionality
+in the meta file documentation.
+

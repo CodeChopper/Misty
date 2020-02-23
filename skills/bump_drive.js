@@ -8,7 +8,6 @@
 //
 //
 
-
 // Returns a random integer between min and max
 function rand_int(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -50,6 +49,10 @@ function red_led() {
 
 function green_led() {
 		misty.ChangeLED(0, 255, 0); // green
+}
+
+function blue_led() {
+		misty.ChangeLED(0, 0, 255); // blue
 }
 
 function random_led() {
@@ -128,13 +131,6 @@ function drive_normal(n) {
 
 function back_up() {
 				
-		// get random sound.
-		
-		// let i = rand_int(0, sounds.length);
-		// misty.Debug(sounds[i]);
-		// misty.PlayAudio(sounds[i]);
-		// pause(1);
-				
 		// Change expression and LED.
 		red_led();
 		misty.DisplayImage("e_Amazement.jpg");
@@ -142,15 +138,16 @@ function back_up() {
 		// back up.
 		misty.Debug("Attempting to back up!");
 		pause(1);
-		drive_reverse(1);
-
+		drive_reverse(2);
 		pause(1);
+		turn_right();
+
 		// turn either left or right.
-		let random_dir = rand_int(0, 2);
-		if (random_dir == 0)
-				turn_left();
-		else
-				turn_right();
+		// let random_dir = rand_int(0, 2);
+		// if (random_dir == 0)
+		//		turn_left();
+		// else
+		//		turn_right();
 }
 
 // The do_action function performs a random personality event.
@@ -189,20 +186,20 @@ function do_action() {
 function register_bumps() {
 
 		// Return data when a bump sensor is pressed
-   misty.AddPropertyTest("Frogger", "isContacted", "==", true, "boolean");
+   misty.AddPropertyTest("Bumper", "isContacted", "==", true, "boolean");
    // Return the sensorName property of BumpSensor events.
-   misty.AddReturnProperty("Frogger", "sensorName");
+   misty.AddReturnProperty("Bumper", "sensorName");
    // Register for BumpSensor events
-   misty.RegisterEvent("Frogger", "BumpSensor", 200, true);
+   misty.RegisterEvent("Bumper", "BumpSensor", 200, true);
 		
 }
 
-function _Frogger(data) {
+function _Bumper(data) {
     // Store the name of the touched sensor
     let sensorName = data.AdditionalResults[0];
 
     // Play a different audio clip when
-    // each sensor is prssed
+    // each sensor is pressed
     switch (sensorName) {
 
         case "Bump_FrontRight":
@@ -228,8 +225,7 @@ function _Frogger(data) {
             misty.PlayAudio("ls_danger.wav", 75);
      				drive_forward(2);
             break
-    }
-		
+    }		
 }
 
 misty.RegisterEvent("Hazard", "HazardNotification", 0, true);
@@ -238,19 +234,41 @@ function _Hazard(data) {
 		back_up();
 }
 
-// Main starts here.
+function _Chin(data) {
+    // Store the name of the touched sensor
+    let sensorName = data.AdditionalResults[0];
 
-misty.Debug("starting skill bump drive!");
-
-register_bumps()
-
-while(1) {
-		do_action();
-		drive_normal(4);
-		pause(3);
+    // Check for first bumper press before starting real skill.
+    switch (sensorName) {
+    case "CapTouch_Chin":
+        misty.Debug("Starting roam algorithm!");
+				main_loop();
+        break
+    }		
 }
 
-// Registers for a timer event called do_action, and invokes the
-// _do_action() callback after a specified number of seconds.
-// misty.RegisterTimerEvent("do_action", seconds(3), true); // set keep alive to true.
+function register_chin() {
+
+		// Return data when a bump sensor is pressed
+   misty.AddPropertyTest("Chin", "isContacted", "==", true, "boolean");
+   // Return the sensorName property of BumpSensor events.
+   misty.AddReturnProperty("Chin", "sensorName");
+   // Register for BumpSensor events
+   misty.RegisterEvent("Chin", "TouchSensor", 200, false);
+}		
+
+function main_loop() {
+		register_bumps();
+		while(1) {
+				do_action();
+				drive_normal(10);
+				pause(1);
+		}
+}
+
+// Main
+
+misty.Debug("Starting Bump Drive Skill...");
+blue_led();
+register_chin();
 

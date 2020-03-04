@@ -19,18 +19,18 @@ function seconds(n) {
 }
 
 // Simple right turn.
-function turn_right() {
-		misty.DriveTime(0, -50, seconds(3));		
+function turn_right(n) {
+		misty.DriveTime(0, -50, seconds(n));		
 }
 
 // Simple left turn.
-function turn_left() {
-		misty.DriveTime(0, 50, seconds(3));
+function turn_left(n) {
+		misty.DriveTime(0, 50, seconds(n));
 }
 
 // Simple drive forward for n seconds.
 function drive_forward(n) {
-		misty.DriveTime(10, 0, seconds(n));
+		misty.DriveTime(50, 0, seconds(n));
 }
 
 function drive_reverse(n) {
@@ -140,7 +140,7 @@ function back_up() {
 		pause(1);
 		drive_reverse(2);
 		pause(1);
-		turn_right();
+		turn_right(2.5);
 
 		// turn either left or right.
 		// let random_dir = rand_int(0, 2);
@@ -179,7 +179,7 @@ function do_action() {
 				break;
 		}
 
-		pause(2);
+		pause(1);
 
 }
 

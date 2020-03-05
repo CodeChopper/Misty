@@ -75,9 +75,10 @@ function random_head() {
 }
 
 function random_arms() {
-    misty.MoveArmDegrees("right", rand_int(-25, 25), 70);
-    pause(1);
-    misty.MoveArmDegrees("left", rand_int(-25, 25), 70);
+    for(i = 0; i < 5; i++) {
+        misty.MoveArmDegrees("right", rand_int(-25, 25), 50);
+        misty.MoveArmDegrees("left", rand_int(-25, 25), 50);
+    }
 }
 
 function random_happy_sound() {
@@ -121,11 +122,12 @@ function drive_normal(n) {
     // restore expression and LED.
     green_led();
     misty.DisplayImage("e_DefaultContent.jpg");
-    
+    misty.SetFlashlight(true);
     pause(1);
     // drive forward.
     drive_forward(n);
     pause(1);
+    misty.SetFlashlight(false);
     
 }
 

@@ -148,13 +148,11 @@ function back_up() {
     misty.DisplayImage("e_Amazement.jpg");
     
     // back up.
-    drive_reverse(3);
+    drive_reverse(1);
     pause(2);
     turn_right(2);
 
 }
-
-
 
 function register_bumps() {
 

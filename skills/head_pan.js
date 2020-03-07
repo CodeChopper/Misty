@@ -1,13 +1,4 @@
 
-//
-// misty.DriveTime(linear_velocity, angular velocity, milliseconds)
-//
-// Angular velocity determines the speed and direction of Misty's rotation.
-// between [-100, 100]: -100 full speed rotation clockwise (right)
-//                       100 full speed rotation counter-clockwise (left)
-//
-//
-
 // Returns a random integer between min and max
 function rand_int(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -30,7 +21,7 @@ function turn_left(n) {
 
 // Simple drive forward for n seconds.
 function drive_forward(n) {
-    misty.DriveTime(15, 0, seconds(n));
+    misty.DriveTime(20, 0, seconds(n));
 }
 
 function drive_reverse(n) {
@@ -61,31 +52,18 @@ function random_led() {
                     rand_int(0, 255));
 }
 
-// pitch: up/down
-function move_head_pitch(angle, velocity) {
-		misty.MoveHeadDegrees(angle, 0, 0, velocity);
-}
+function random_head() {
 
-// yaw: left/right
-function move_head_yaw(angle, velocity) {
-		misty.MoveHeadDegrees(0, 0, angle, velocity);
-}
-
-// roll: tilt left, tilt right
-function move_head_roll(angle, velocity) {
-		misty.MoveHeadDegrees(0, angle, 0, velocity);
-}
-
-function pan_head_left(velocity) {
-		move_head_yaw(30, velocity); 
-}
-
-function pan_head_right(velocity) {
-		move_head_yaw(-30, velocity); 
-}
-
-function pan_head_up(velocity) {
-		move_head_pitch(-10, 80);
+    // Moves Misty's head to a random position. Adjust the min/max
+    // values passed into rand_int() to change Misty's range of
+    // motion when she calls this method.
+    
+    misty.MoveHeadDegrees(
+        rand_int(-20, 20), // Random pitch position between -40 and 20
+        rand_int(-20, 20), // Random roll position between -30 and 30
+        rand_int(-20, 20), // Random yaw position between -40 and 40
+        90); // Head movement velocity. Can increase up to 100.
+		
 }
 
 function random_arms() {
@@ -134,10 +112,11 @@ function drive_normal(n) {
     // restore expression and LED.
     green_led();
     misty.DisplayImage("e_DefaultContent.jpg");
-		pause(1);
+    
+    pause(1);
     // drive forward.
     drive_forward(n);
-		pause(1);
+    pause(1);
     
 }
 
@@ -152,9 +131,46 @@ function back_up() {
     pause(2);
     turn_right(2);
 
+    // turn either left or right.
+    // let random_dir = rand_int(0, 2);
+    // if (random_dir == 0)
+    //    turn_left();
+    // else
+    //    turn_right();
 }
 
+// The do_action function performs a random personality event.
+function do_action() {
 
+    misty.Debug("Inside do_action()...");
+    
+    // I don't know how to use hash tables or maps in Javascript yet, so do it a crude way!
+    let events = ["arms", "head", "sound"];
+    let rand_event = events[rand_int(0, events.length)];
+    
+    switch(rand_event) {
+
+    case "sound":
+        random_happy_sound();
+        break;
+    case "arms":
+        random_arms();
+        break;
+    case "head":
+        random_head();
+        break;
+    case "led":
+        random_led();
+        break;
+    case "nothing":
+        break;
+    default:
+        break;
+    }
+
+    pause(1);
+
+}
 
 function register_bumps() {
 
@@ -201,36 +217,60 @@ function _Bumper(data) {
     }   
 }
 
-function _Hazard(data) {
-    back_up();
+function random_head() {
+
+    // Moves Misty's head to a random position. Adjust the min/max
+    // values passed into rand_int() to change Misty's range of
+    // motion when she calls this method.
+    
+    misty.MoveHeadDegrees(
+        rand_int(-20, 20), // Random pitch position between -40 and 20
+        rand_int(-20, 20), // Random roll position between -30 and 30
+        rand_int(-20, 20), // Random yaw position between -40 and 40
+        90); // Head movement velocity. Can increase up to 100.
 }
 
-function _Chin(data) {
-    // Store the name of the touched sensor
-    let sensorName = data.AdditionalResults[0];
+function random_head() {
 
-    // Check for first bumper press before starting real skill.
-    switch (sensorName) {
-    case "CapTouch_Chin":
-        misty.Debug("Starting roam algorithm!");
-        main_loop();
-        break
-    }   
+    // Moves Misty's head to a random position. Adjust the min/max
+    // values passed into rand_int() to change Misty's range of
+    // motion when she calls this method.
+    
+    misty.MoveHeadDegrees(
+        rand_int(-20, 20), // Random pitch position between -40 and 20
+        rand_int(-20, 20), // Random roll position between -30 and 30
+        rand_int(-20, 20), // Random yaw position between -40 and 40
+        90); // Head movement velocity. Can increase up to 100.
 }
 
-function register_chin() {
+// pitch: up/down
+function move_head_pitch(angle, velocity) {
+		misty.MoveHeadDegrees(angle, 0, 0, velocity);
+}
 
-    // Return data when a bump sensor is pressed
-		misty.AddPropertyTest("Chin", "isContacted", "==", true, "boolean");
-		// Return the sensorName property of BumpSensor events.
-		misty.AddReturnProperty("Chin", "sensorName");
-		// Register for BumpSensor events
-		misty.RegisterEvent("Chin", "TouchSensor", 200, false);
+// yaw: left/right
+function move_head_yaw(angle, velocity) {
+		misty.MoveHeadDegrees(0, 0, angle, velocity);
+}
 
-}   
+// roll: tilt left, tilt right
+function move_head_roll(angle, velocity) {
+		misty.MoveHeadDegrees(0, angle, 0, velocity);
+}
+
+function pan_head_left(velocity) {
+		move_head_yaw(30, velocity); 
+}
+
+function pan_head_right(velocity) {
+		move_head_yaw(-30, velocity); 
+}
+
+function pan_head_up(velocity) {
+		move_head_pitch(-10, 80);
+}
 
 var pan_head = function(current_state) {
-		
 		var new_state = "";
 		
 		switch(current_state) {
@@ -261,21 +301,17 @@ var pan_head = function(current_state) {
 }
 
 // Main
+misty.Debug("Starting Head pan skill...");
 
-misty.Debug("Starting Basic Roam Skill...");
-blue_led();
-pause(5);
 pan_head_up(80);
-misty.SetFlashlight(true);
-misty.RegisterEvent("Hazard", "HazardNotification", 0, true);
 current_dir = "forward"
 while(1) {
 		random_happy_sound();
 		random_arms();
-		pause(5);
+		pause(10);
 		current_dir = pan_head(current_dir)
-		pause(5);
-		drive_normal(5);
 }
-misty.SetFlashlight(false);				
+
+
+
 

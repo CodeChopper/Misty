@@ -148,10 +148,10 @@ function back_up() {
     misty.DisplayImage("e_Amazement.jpg");
     
     // back up.
-    drive_reverse(1);
-    pause(2);
+    // drive_reverse(1);
+    // pause(2);
     turn_right(2);
-
+		pause(1);
 }
 
 function register_bumps() {
@@ -268,7 +268,7 @@ misty.SetFlashlight(true);
 misty.RegisterEvent("Hazard", "HazardNotification", 0, true);
 current_dir = "forward"
 while(1) {
-		random_happy_sound();
+		// random_happy_sound();
 		random_arms();
 		pause(5);
 		current_dir = pan_head(current_dir)
